@@ -17,7 +17,6 @@ class InspectExporter extends BaseExporter {
   }
 
   writeHeader() {}
-
   writeFooter() {}
 }
 
