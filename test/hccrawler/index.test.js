@@ -88,6 +88,33 @@ describe("HCCrawler", () => {
         expect(disconnected).toBe(1);
       });
 
+      describe("when the crawler is launched with a global timeout", () => {
+        test("stops crawling exceeded global timeout", async () => {
+          let globalTimeoutEvents = 0;
+          let requestStartedEvents = 0;
+          this.crawler = await HCCrawler.launch(
+            extend(
+              {
+                globalTimeout: 1,
+                evaluatePage,
+                onSuccess: this.onSuccess
+              },
+              DEFAULT_OPTIONS
+            )
+          );
+          await this.crawler.queue({ url: INDEX_PAGE });
+          this.crawler.on("globaltimeout", param => {
+            globalTimeoutEvents++;
+          });
+          this.crawler.on("requeststarted", param => {
+            requestStartedEvents++;
+          });
+          await this.crawler.onIdle();
+          expect(globalTimeoutEvents).toBe(1);
+          expect(requestStartedEvents).toBe(0);
+        });
+      });
+
       describe("when the crawler is launched with necessary options", () => {
         beforeEach(async () => {
           this.crawler = await HCCrawler.launch(
