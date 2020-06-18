@@ -96,7 +96,8 @@
     "lint": "eslint --quiet -f codeframe . || eslint .",
     "test": "yarn jest-exclude-redis-cache",
     "test-all": "yarn tsc && yarn lint && yarn jest",
-    "tsc": "tsc -p ."
+    "tsc": "tsc -p .",
+    "non-yarn-test": "node_modules/jest/bin/jest.js --verbose $(find test -name '*.test.js' -not -name 'redis.test.js')"
   },
   "version": "1.8.0"
 }

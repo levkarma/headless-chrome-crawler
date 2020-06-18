@@ -946,6 +946,23 @@ describe("HCCrawler", () => {
           expect(this.onSuccess).toHaveBeenCalledTimes(3);
         });
 
+	test("skips similar url's with different query parameters when ignoreQueryParameters - true", async () => {
+          await this.crawler.queue({ 
+	    url: `${PREFIX}/1.html?q=1`, 
+	    ignoreQueryParameters: true
+	  });
+          await this.crawler.queue({ 
+	    url: `${PREFIX}/1.html?q=2`, 
+	    ignoreQueryParameters: true 
+	  });
+          await this.crawler.queue({ 
+	    url: `${PREFIX}/1.html`, 
+	    ignoreQueryParameters: true 
+	  });
+          await this.crawler.onIdle();
+          expect(this.onSuccess).toHaveBeenCalledTimes(1);
+        });
+
         describe("when the first page contains several links", () => {
           beforeEach(() => {
             this.server.setContent(
